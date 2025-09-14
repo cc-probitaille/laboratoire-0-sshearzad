@@ -1,9 +1,9 @@
 # Identification de l'étudiant
 
-- <nomComplet1>Entrer votre nom</nomComplet1>
-- <courriel1>Entrer votre courriel</courriel1>
-- <codeMoodle1>Entrer votre code moodle obtenu à partir de Signets, 2 lettres majuscule avec 5 chiffres</codeMoodle1>
-- <githubAccount1>Entrer l'identifiant de votre compte github</githubAccount1>
+- <nomComplet1>Sosan Shearzad</nomComplet1>
+- <courriel1>sosan.shearzad.1@etsmtl.ca</courriel1>
+- <codeMoodle1>AS57430</codeMoodle1>
+- <githubAccount1>sshearzad</githubAccount1>
 
 # Squelette pour un API simple dans Node, Express et TypeScript
 
@@ -155,17 +155,27 @@ Voici la même figure, mais sous forme de diagramme de séquence avec l'acteur. 
 #### Jouer aux dés
 
 1. Le Joueur demande à démarrer le jeu en s'identifiant.
-1. Le Joueur demande à lancer les dés.
-1. Le Système affiche le nom du joueur et le résultat de la partie, ainsi que le nombre de parties et le nombre de fois que le Joueur a gagné. Pour un lancer, si le total est égal à sept, le Joueur a gagné. Dans tous les autres cas, il a perdu.
+2. Le Joueur demande à lancer les dés.
+3. Le Système affiche le nom du joueur et le résultat de la partie, ainsi que le nombre de parties et le nombre de fois que le Joueur a gagné. Pour un lancer, si le total est égal à sept, le Joueur a gagné. Dans tous les autres cas, il a perdu.
 
 *Le Joueur répète l'étape 3 jusqu'à ce qu'il ait fini.*
 
 4. Le Joueur demande à terminer le jeu.
-1. ~~Le Système affiche un tableau de bord avec les noms des joueurs et le ratio des parties gagnées (nombre de fois gagné / nombre de lancers).~~
+5. ~~Le Système affiche un tableau de bord avec les noms des joueurs et le ratio des parties gagnées (nombre de fois gagné / nombre de lancers).~~
+
+#### Redémarrer
+
+1. Le Joueur demande à redémarrer l'application.
+2. Le Système termine tous les jeux en cours et redémarre l'application.
 
 ### Diagramme de cas d'utilisation
 
 ![Diagramme de cas d'utilisation](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/profcfuhrmanets/log210-jeu-de-des-node-express-ts/master/docs/modeles/dcu.puml)
+
+### Diagramme de classes logicielles
+![Diagramme de classes - App](modeles/App/App.png)
+
+[Source PlantUML](modeles/App.puml)
 
 ### Modèle du domaine
 
@@ -195,8 +205,9 @@ Voici la même figure, mais sous forme de diagramme de séquence avec l'acteur. 
 
 - d1.valeur est devenue un nombre entier aléatoire entre 1 et 6
 - d2.valeur est devenue un nombre entier aléatoire entre 1 et 6
+- d3.valeur est devenue un nombre entier aléatoire entre 1 et 6
 - j.nbLancers a été incrémenté sur une base de correspondance avec nom
-- j.nbLancersGagnés a été incrémenté si la totale de d1.valeur et d2.valeur est égale à 7
+- j.nbLancersGagnés a été incrémenté si la totale de d1.valeur, d2.valeur, d3.valeur est plus petite ou égale à 10
 
 **RDCU**
 

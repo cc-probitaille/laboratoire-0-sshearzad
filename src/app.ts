@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, ErrorRequestHandler, RequestHandler } from 'express';
 import ExpressSession from 'express-session';
 import logger from 'morgan';
 import flash from 'express-flash-plus';
@@ -61,13 +61,23 @@ class App {
 
     // Route pour classement (stats)
     router.get('/stats', (req, res, next) => {
+      // liste existante
+      const joueurs: any[] = JSON.parse(jeuRoutes.controleurJeu.joueurs);
+
+      // ajouter propriété "ratio" (succès/tentatives) + tri décroissant
+      const joueursAvecRatio = joueurs
+        .map(j => ({
+          ...j,
+          ratio: j.lancers ? (j.lancersGagnes / j.lancers) : 0
+        }))
+        .sort((a, b) => b.ratio - a.ratio);
+
       res.render('stats',
-        // passer objet au gabarit (template) Pug
         {
           title: `${titreBase}`,
           user: user,
           // créer nouveau tableau de joueurs qui est trié par ratio
-          joueurs: JSON.parse(jeuRoutes.controleurJeu.joueurs)
+          joueurs: joueursAvecRatio
         });
     });
 
@@ -83,19 +93,17 @@ class App {
       }
     });
 
-    // Route to login
+    // Route to logout
     router.get('/signout', async function (req, res) {
       // simuler une déconnexion
       user = { isAnonymous: true };
       return res.redirect('/');
     });
 
-
     this.expressApp.use('/', router);  // routage de base
+    this.expressApp.use('/api/v1/jeu', jeuRoutes.router);  // tous les URI du DSS
 
-    this.expressApp.use('/api/v1/jeu', jeuRoutes.router);  // tous les URI pour le scénario jeu (DSS) commencent ainsi
   }
-
 }
 
 export default new App().expressApp;

@@ -50,6 +50,7 @@ export class JeuRouter {
       this._errorCode500(error, req, res);
     }
   }
+  
 
   /**
    * jouer une fois aux dés
@@ -107,6 +108,37 @@ export class JeuRouter {
   }
 
   /**
+   * redémarrer le jeu
+   */
+  public redemarrerJeu(req: Request, res: Response, next: NextFunction) {
+    try {
+      const resultatObj = this._controleurJeu.redemarrerJeu();
+      // resultatObj.v3
+      res.status(200).json({ message: 'Success', resultatObj });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  jouerQuery(req: Request, res: Response, next: NextFunction) {
+    try {
+      const nom =
+        (req.query.nom as string | undefined) ??
+        (req.query.id as string | undefined);
+
+      if (!nom) {
+        res.status(400).json({ error: "Paramètre 'nom' manquant" });
+        return;
+      }
+
+      const resultat = this._controleurJeu.jouer(nom);
+      res.status(200).json({ resultat });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /**
      * Take each handler, and attach to one of the Express.Router's
      * endpoints.
      */
@@ -114,6 +146,9 @@ export class JeuRouter {
     this._router.post('/demarrerJeu', this.demarrerJeu.bind(this)); // pour .bind voir https://stackoverflow.com/a/15605064/1168342
     this._router.get('/jouer/:nom', this.jouer.bind(this)); // pour .bind voir https://stackoverflow.com/a/15605064/1168342
     this._router.get('/terminerJeu/:nom', this.terminerJeu.bind(this)); // pour .bind voir https://stackoverflow.com/a/15605064/1168342
+    this._router.get('/redemarrerJeu', this.redemarrerJeu.bind(this));
+    this._router.get('/jouer', this.jouerQuery.bind(this))
+
   }
 
 }
